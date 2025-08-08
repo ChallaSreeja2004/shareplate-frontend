@@ -3,11 +3,15 @@ body {
     font-family: 'Lato', sans-serif;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
     background-color: #f9f9f9;
     color: #333;
-    /* Prevents horizontal scroll caused by minor element overflows */
-    overflow-x: hidden; 
+    /* This is a key fix: it prevents any accidental horizontal scroll */
+    overflow-x: hidden;
+}
+
+/* Universal box-sizing for predictable layouts, like in your other CSS */
+* {
+    box-sizing: border-box;
 }
 
 .container {
@@ -118,7 +122,7 @@ nav ul {
     display: flex;
     justify-content: center;
     gap: 2rem;
-    flex-wrap: wrap; /* This allows wrapping on medium screens */
+    flex-wrap: wrap;
 }
 
 .step {
@@ -126,11 +130,10 @@ nav ul {
     padding: 2rem;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    /* --- MODIFIED --- */
-    /* Use flex-basis for better responsive control instead of fixed width */
-    flex-basis: 400px; 
-    flex-grow: 1; /* Allows steps to grow and fill space */
     text-align: left;
+    /* --- REVISED: Use a flexible width that won't overflow --- */
+    width: 45%;
+    max-width: 500px; /* Prevent it from becoming too large on desktops */
 }
 
 .step-icon {
@@ -140,7 +143,7 @@ nav ul {
 
 .step-icon i {
     font-size: 60px;
-    color: #2c3e50; /* Corrected color value */
+    color: #2c3e50;
 }
 
 .step h3 {
@@ -167,50 +170,48 @@ footer {
     padding: 2rem 0;
 }
 
-/* ================================== */
-/* ===== RESPONSIVE DESIGN FIXES ===== */
-/* ================================== */
 
-/* For tablets and smaller desktops */
+/* =========================================== */
+/* ===== FINAL RESPONSIVE DESIGN FIXES ===== */
+/* =========================================== */
+
+/* For tablets (and below) */
 @media (max-width: 900px) {
     .steps-container {
-        /* On tablets, we want the steps to stack */
+        /* Stack the cards vertically, just like on your login page */
         flex-direction: column;
-        align-items: center; /* Center the stacked items */
+        align-items: center;
     }
 
     .step {
-        /* Allow the step to take up more width on tablets */
-        flex-basis: 80%;
-        max-width: 500px; /* Prevent it from getting too wide */
+        /* Let the card take up most of the width */
+        width: 90%; 
     }
 }
 
-
-/* For mobile phones */
-@media (max-width: 768px) {
-    /* --- MODIFIED --- */
-    /* This makes the header stack cleanly on mobile */
+/* For mobile phones (and below) */
+@media (max-width: 500px) {
     header .container {
         flex-direction: column;
-        gap: 1.5rem; /* Increased gap for better spacing */
+        gap: 1.5rem;
     }
     
     nav ul {
         width: 100%;
-        justify-content: space-around; /* Space out the buttons */
+        justify-content: space-around;
     }
 
     .hero h1 {
-        font-size: 2.5rem;
+        font-size: 2.2rem; /* Make hero text smaller on phones */
     }
 
-    /* --- MODIFIED --- */
-    /* This ensures the step cards don't have a minimum width that breaks the layout */
+    .about-section h2, .how-it-works-section h2 {
+        font-size: 2rem; /* Make section titles smaller */
+    }
+
     .step {
-        /* On mobile, it should take up nearly the full width */
-        flex-basis: 100%;
-        width: 100%;
-        padding: 1.5rem; /* Reduce padding slightly on mobile */
+        /* On the smallest screens, use 100% of the container's width */
+        width: 100%; 
+        padding: 1.5rem;
     }
 }
