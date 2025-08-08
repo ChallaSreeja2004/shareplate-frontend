@@ -82,52 +82,49 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- THIS IS THE NEW, SIMPLIFIED FUNCTION ---
-    function addRequestButtonListeners() {
-        document.querySelectorAll('.request-btn').forEach((button) => {
-            button.addEventListener('click', async (event) => {
-                const btn = event.currentTarget;
-                const { donorId, quantity, description, donorName } = btn.dataset;
+   // This is the new addRequestButtonListeners function
+function addRequestButtonListeners() {
+    document.querySelectorAll('.request-btn').forEach((button) => {
+        button.addEventListener('click', async (event) => {
+            const btn = event.currentTarget;
+            const { donorId, quantity, description, donorName } = btn.dataset;
 
-                // 1. We now only need the logged-in user's ID.
-                const ngoId = localStorage.getItem('ngoId');
+            // We now only need the logged-in user's ID.
+            const ngoId = localStorage.getItem('ngoId');
 
-                if (!ngoId) {
-                    return alert('Your user ID could not be found. Please try logging out and back in again.');
-                }
+            if (!ngoId) {
+                return alert('Your user ID could not be found. Please try logging out and back in again.');
+            }
 
-                try {
-                    // 2. The payload is now much smaller and more secure.
-                    // The backend will look up the NGO and Donor details itself.
-                    const requestPayload = {
-                        location: {
-                            type: 'Point',
-                            coordinates: [parseFloat(longitudeInput.value), parseFloat(latitudeInput.value)],
-                        },
-                        donorId: donorId,
-                        ngoId: ngoId,
-                        foodDetails: {
-                            foodQuantity: parseInt(quantity, 10),
-                            description: description,
-                        },
-                    };
+            try {
+                // The payload is now much smaller and more secure.
+                const requestPayload = {
+                    location: {
+                        type: 'Point',
+                        coordinates: [parseFloat(longitudeInput.value), parseFloat(latitudeInput.value)],
+                    },
+                    donorId: donorId,
+                    ngoId: ngoId,
+                    foodDetails: {
+                        foodQuantity: parseInt(quantity, 10),
+                        description: description,
+                    },
+                };
 
-                    // 3. The apiClient call is clean and simple.
-                    await apiClient.post('/requests', requestPayload);
+                await apiClient.post('/requests', requestPayload);
 
-                    // 4. This code will now be reached, and the button will update.
-                    btn.disabled = true;
-                    btn.innerText = 'Request Sent';
-                    alert(`Request sent successfully to ${donorName}!`);
+                // This code will now be reached.
+                btn.disabled = true;
+                btn.innerText = 'Request Sent';
+                alert(`Request sent successfully to ${donorName}!`);
 
-                } catch (error) {
-                    console.error('Error sending request:', error);
-                    alert(error.response?.data?.message || 'Could not send request. Please try again.');
-                }
-            });
+            } catch (error) {
+                console.error('Error sending request:', error);
+                alert(error.response?.data?.message || 'Could not send request. Please try again.');
+            }
         });
-    }
-
+    });
+}
     // --- RENDER PAGINATION FUNCTION (Unchanged) ---
     function renderPagination(totalPages) {
         paginationControls.innerHTML = '';
