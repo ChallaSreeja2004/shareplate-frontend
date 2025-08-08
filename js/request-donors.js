@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- ADD LISTENERS FUNCTION (Now it will find the buttons) ---
     function addRequestButtonListeners() {
-        document.querySelectorAll('.request-btn').forEach((button) => {
+        document.querySelectorAll('.btn-request').forEach((button) => {
             button.addEventListener('click', async (event) => {
                 const btn = event.currentTarget;
                 const { donorId, quantity, description, donorName } = btn.dataset;
@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             type: 'Point',
                             coordinates: [parseFloat(longitudeInput.value), parseFloat(latitudeInput.value)],
                         },
-                        donorId: donorId,
+                        donationId: donationId,
                         ngoId: ngoId,
                         foodDetails: {
                             foodQuantity: parseInt(quantity, 10),
