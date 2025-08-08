@@ -1,0 +1,186 @@
+/* General Body Styles */
+body {
+    font-family: 'Lato', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Header Styles */
+header {
+    background-color: #fff;
+    padding: 1rem 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #2c3e50;
+    text-decoration: none;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 1rem;
+}
+
+.btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background-color: #3498db;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: 700;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #2980b9;
+}
+
+/* Hero Section Styles */
+.hero {
+    background: #2c3e50;
+    color: #fff;
+    text-align: center;
+    padding: 4rem 1rem;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    font-family: 'Roboto', sans-serif;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* About Section Styles */
+.about-section {
+    padding: 4rem 1rem;
+    background-color: #fff;
+    text-align: center;
+}
+
+.about-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    color: #2c3e50;
+}
+
+.about-section p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* How It Works Section */
+.how-it-works-section {
+    padding: 4rem 1rem;
+    text-align: center;
+}
+
+.how-it-works-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: #2c3e50;
+}
+
+.steps-container {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.step {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    width: 45%;
+    min-width: 300px;
+    text-align: left;
+}
+
+.step-icon {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+/* UPDATED ICON STYLES */
+.step-icon i {
+    font-size: 60px; /* Control icon size */
+    color: 2c3e50; /* Icon color */
+}
+
+.step h3 {
+    text-align: center;
+    font-size: 1.5rem;
+    color: #3498db;
+    margin-bottom: 1.5rem;
+}
+
+.step ol {
+    padding-left: 1.5rem;
+}
+
+.step li {
+    font-size: 1rem;
+    line-height: 1.8;
+}
+
+/* Footer Styles */
+footer {
+    background-color: #2c3e50;
+    color: #fff;
+    text-align: center;
+    padding: 2rem 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    header .container {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .steps-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .step {
+        width: 80%;
+    }
+}

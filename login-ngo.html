@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NGO Login - SharePlate</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Uses the same login.css file -->
+    <link rel="stylesheet" href="css/login.css"> 
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="js/apiConfig.js"></script> 
+    <script>
+        // Your original, unchanged JavaScript for NGO login
+        axios.interceptors.request.use(config => {
+            const token = localStorage.getItem('token');
+            if (token) {
+                config.headers.Authorization = `Bearer ${token}`;
+            }
+            return config;
+        }, error => {
+            return Promise.reject(error);
+        });
+
+        async function handleSubmit(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const errorMessageDiv = document.getElementById('error-message');
+            errorMessageDiv.style.display = 'none'; 
+
+            try {
+                const response = await axios.post('/login-ngo', { email, password });
+                console.log(response.data)
+                if (response.data.token) {
+                    localStorage.setItem('ngoId', response.data.user.id);
+                    localStorage.setItem('token', response.data.token);
+                }
+                window.location.href = 'ngo-dashboard.html';
+            } catch (error) {
+                const errorMessageDiv = document.getElementById('error-message');
+                errorMessageDiv.textContent = 'Login failed. Please check your credentials and try again.';
+                errorMessageDiv.style.display = 'block';
+                console.error('Error logging in:', error);
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <!-- Consistent Header -->
+    <header>
+        <div class="container">
+            <a href="index.html" class="logo">SharePlate</a>
+            <nav>
+                <ul>
+                    <li><a href="index.html" class="btn-secondary">Back to Home</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main content wrapper -->
+    <main class="login-wrapper">
+        <!-- Branding section (same for brand consistency) -->
+        <!-- NEW: NGO-Specific Branding Section -->
+<!-- NEW: Simple NGO-Specific Branding Section -->
+<div class="branding-section">
+    <h2>Find Food for Your Community.</h2>
+    <p>We make it simple to connect with local donors. Log in to find and request the food you need to support your important work.</p>
+</div>
+
+        <!-- Section for the form -->
+        <div class="form-section">
+            <div class="form-container">
+                <!-- NGO-Specific Text -->
+                <h1>Welcome, Partner!</h1>
+                <p>Log in to connect with donors and find the resources your community needs.</p>
+                
+                <form onsubmit="handleSubmit(event)" method="POST" novalidate>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <div id="error-message" class="error-message" style="display: none;"></div>
+                    <button type="submit" class="btn">Login</button>
+                </form>
+                
+                <!-- NGO-Specific Registration Link -->
+                <p class="form-footer">Not registered? <a href="register-ngo.html">Create an account</a></p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Consistent Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 SharePlate. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

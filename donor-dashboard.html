@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donor Dashboard - SharePlate</title>
+    <!-- Professional Fonts and Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- Link to the new dashboard stylesheet -->
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <!-- Consistent Header for a Logged-in User -->
+    <header>
+        <div class="container">
+            <a href="index.html" class="logo">SharePlate</a>
+            <nav>
+                <ul>
+                    <!-- Logout button is standard for dashboards -->
+                    <li><button id="logout-btn" class="btn-secondary">Logout</button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="dashboard-main">
+        <div class="container">
+            <div class="dashboard-header">
+                <!-- A personalized welcome message is more professional -->
+                <h1>Welcome, <span id="donor-name">Donor</span>!</h1>
+                <p>Choose an option below to manage your donations.</p>
+            </div>
+
+            <div class="dashboard-cards">
+                <!-- Card for viewing requests -->
+                <a href="request.html" class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <div class="card-content">
+                        <h2>View Requests</h2>
+                        <p>See and respond to food requests from local NGOs.</p>
+                    </div>
+                </a>
+                
+                <!-- Card for donating new food -->
+                <a href="donate-food.html" class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-box-open"></i>
+                    </div>
+                    <div class="card-content">
+                        <h2>Donate Food</h2>
+                        <p>Create a new listing for surplus food you want to donate.</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Consistent Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 SharePlate. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- Professional Dashboard Scripts ---
+
+        // 1. Handle Logout
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            // Clear user-specific data from storage
+            localStorage.removeItem('token');
+            localStorage.removeItem('donorId');
+            
+            // Redirect to the login page
+            window.location.href = 'login-donor.html';
+        });
+
+        // 2. Check if the user is logged in
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                // If no token is found, redirect to login immediately
+                alert('You are not logged in. Redirecting to login page.');
+                window.location.href = 'login-donor.html';
+            }
+            // You could add another script here to fetch the donor's actual name
+            // and update the #donor-name span to make it truly personal.
+        });
+    </script>
+    <script src="js/apiConfig.js"></script> 
+</body>
+</html>

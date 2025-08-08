@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Incoming Requests - SharePlate</title>
+    <!-- Professional Fonts and Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- Link to the reusable table page stylesheet -->
+    <link rel="stylesheet" href="css/request.css">
+    <script src="js/apiConfig.js"></script> 
+</head>
+<body>
+    <!-- Consistent Header -->
+    <header>
+        <div class="container">
+            <a href="index.html" class="logo">SharePlate</a>
+            <nav>
+                <ul>
+                    <li><a href="donor-dashboard.html" class="btn-secondary">Back to Dashboard</a></li>
+                    <li><button id="logout-btn" class="btn-logout">Logout</button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="page-main">
+        <div class="container">
+            <div class="page-header">
+                <h1>Incoming Food Requests</h1>
+                <p>Review the requests from NGOs for your donations.</p>
+            </div>
+
+            <div class="table-container">
+                <table id="requestTable">
+                    <thead>
+                        <!-- Corrected headers to match the data we will display -->
+                        <tr>
+                            <th>NGO Name</th>
+                            <th>Contact Email</th>
+                            <th>Description</th>
+                            <th>Quantity (Serves)</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <!-- The body needs an ID so JavaScript can target it -->
+                    <tbody id="request-table-body">
+                        <!-- Dynamic rows will be inserted here -->
+                    </tbody>
+                </table>
+                <div id="no-requests-message" style="display: none; text-align: center; padding: 2rem;">
+                    <p>You have no pending food requests.</p>
+                </div>
+            </div>
+            <!-- This DIV is essential for the page numbers to appear -->
+            <div id="pagination-controls" class="pagination-container"></div>
+        </div>
+    </main>
+
+    <!-- Consistent Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 SharePlate. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="js/request.js"></script> 
+</body>
+</html>

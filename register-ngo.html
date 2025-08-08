@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NGO Registration - SharePlate</title>
+    <!-- Professional Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Link to the existing registration stylesheet -->
+    <link rel="stylesheet" href="css/register.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="js/apiConfig.js"></script> 
+</head>
+<body>
+    <!-- Consistent Header -->
+    <header>
+        <div class="container">
+            <a href="index.html" class="logo">SharePlate</a>
+            <nav>
+                <ul>
+                    <li><a href="index.html" class="btn-secondary">Back to Home</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Wrapper -->
+    <main class="register-wrapper">
+        <!-- Branding Section for NGOs -->
+        <div class="branding-section">
+            <h2>Become a SharePlate Partner.</h2>
+            <p>Join our network to easily find food donations from generous people and businesses in your area, helping you focus on your vital community work.</p>
+        </div>
+
+        <!-- Form Section -->
+        <div class="form-section">
+            <div class="form-container">
+                <h1>Register Your Organization</h1>
+                <p>Fill out the form to get started. It's free and simple.</p>
+                <form id="register-form" novalidate>
+                    <div class="form-group">
+                        <label for="name">Your Full Name (Contact Person)</label>
+                        <input type="text" id="name" name="name" required>
+                        <div class="error-message" id="name-error"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ngoName">NGO Name</label>
+                        <input type="text" id="ngoName" name="ngoName" required>
+                        <div class="error-message" id="ngoName-error"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Official Email Address</label>
+                        <input type="email" id="email" name="email" required>
+                        <div class="error-message" id="email-error"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="mobile">Official Mobile Number</label>
+                        <input type="tel" id="mobile" name="mobile" required>
+                        <div class="error-message" id="mobile-error"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required>
+                        <div class="error-message" id="password-error"></div>
+                    </div>
+                    <div id="form-error" class="error-message" style="display: none;"></div>
+                    <button type="submit" class="btn">Create Account</button>
+                </form>
+                <p class="form-footer">Already have an account? <a href="login-ngo.html">Log in here</a></p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Consistent Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 SharePlate. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Your original, unchanged JavaScript for validation and submission
+        function showError(elementId, message) {
+            const errorDiv = document.getElementById(`${elementId}-error`);
+            if(errorDiv) errorDiv.innerText = message;
+        }
+
+        function clearError(elementId) {
+            const errorDiv = document.getElementById(`${elementId}-error`);
+            if(errorDiv) errorDiv.innerText = '';
+        }
+
+        document.getElementById('register-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const nameInput = document.getElementById('name');
+            const ngoNameInput = document.getElementById('ngoName');
+            const emailInput = document.getElementById('email');
+            const mobileInput = document.getElementById('mobile');
+            const passwordInput = document.getElementById('password');
+            
+            const name = nameInput.value;
+            const ngoName = ngoNameInput.value;
+            const email = emailInput.value;
+            const mobile = mobileInput.value;
+            const password = passwordInput.value;
+
+            let isValid = true;
+            
+            // Clear previous errors
+            clearError('name');
+            clearError('ngoName');
+            clearError('email');
+            clearError('mobile');
+            clearError('password');
+            document.getElementById('form-error').style.display = 'none';
+
+            if (name.trim() === '') {
+                showError('name', 'Contact person\'s name is required.');
+                isValid = false;
+            }
+
+            if (ngoName.trim() === '') {
+                showError('ngoName', 'NGO Name is required.');
+                isValid = false;
+            }
+
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(email)) {
+                showError('email', 'Please enter a valid email format.');
+                isValid = false;
+            }
+
+            const mobilePattern = /^[6-9]\d{9}$/;
+            if (!mobilePattern.test(mobile)) {
+                showError('mobile', 'Please enter a valid 10-digit mobile number.');
+                isValid = false;
+            }
+
+            if (password.length < 8 || !/[a-z]/.test(password) || !/[A-Z]/.test(password) || !/\d/.test(password) || !/[!@#$%^&*]/.test(password)) {
+                showError('password', 'Password must be 8+ characters and include uppercase, lowercase, a number, and a special character.');
+                isValid = false;
+            }
+
+            if (isValid) {
+                try {
+                    const response = await axios.post('/register-ngo', { name, ngoName, email, mobile, password });
+                    console.log('Registration successful:', response.data);
+                    window.location.href = 'login-ngo.html';
+                } catch (error) {
+                    const formErrorDiv = document.getElementById('form-error');
+                    formErrorDiv.style.display = 'block';
+                    formErrorDiv.innerText = error.response?.data?.message || 'Registration failed. The email or mobile number may already be in use.';
+                    console.error('Error during registration:', error);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

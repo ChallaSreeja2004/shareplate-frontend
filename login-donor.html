@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- (Your head content remains the same) -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donor Login - SharePlate</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/login.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="js/apiConfig.js"></script> 
+    <script defer>
+        axios.interceptors.request.use(config => {
+            const token = localStorage.getItem('token');
+            if (token) {
+                config.headers.Authorization = `Bearer ${token}`;
+            }
+            return config;
+        }, error => {
+            return Promise.reject(error);
+        });
+
+        async function handleSubmit(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+        
+            const errorMessageDiv = document.getElementById('error-message');
+            errorMessageDiv.style.display = 'none'; // Hide it initially
+        
+            try {
+                const response = await axios.post('/login-donor', { email, password });
+        
+                if (response.data.token) {
+                    localStorage.setItem('donorId', response.data.user.id);
+                    localStorage.setItem('token', response.data.token);
+                    // Refresh and redirect
+                    window.location.replace('donor-dashboard.html'); // Use replace to prevent going back
+                } else {
+                    errorMessageDiv.textContent = response.data.message || 'Login failed. Please try again.';
+                    errorMessageDiv.style.display = 'block';
+                }
+            } catch (error) {
+                errorMessageDiv.textContent = error.response?.data?.message || 'Login failed. Please check your credentials and try again.';
+                errorMessageDiv.style.display = 'block';
+                console.error('Error logging in:', error);
+            }
+        }
+        
+    </script>
+</head>
+
+<body>
+    <!-- Consistent Header -->
+    <header>
+        <div class="container">
+            <a href="index.html" class="logo">SharePlate</a>
+            <nav>
+                <ul>
+                    <li><a href="index.html" class="btn-secondary">Back to Home</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- NEW: Main content wrapper -->
+    <main class="login-wrapper">
+        <!-- Section for branding and mission -->
+        <!-- NEW: Donor-Specific Branding Section -->
+<!-- NEW: Simple Donor-Specific Branding Section -->
+<div class="branding-section">
+    <h2>Share Food, Help People.</h2>
+    <p>Thank you for helping our community. Your surplus food will go directly to people in need, making sure no good food goes to waste.</p>
+</div>
+
+        <!-- Section for the form -->
+        <div class="form-section">
+            <div class="form-container">
+                <h1>Welcome Back, Donor!</h1>
+                <p>Log in to help us reduce food waste and support our community.</p>
+                <form onsubmit="handleSubmit(event)" method="POST" novalidate>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <div id="error-message" class="error-message" style="display: none;"></div>
+                    <button type="submit" class="btn">Login</button>
+                </form>
+                <p class="form-footer">Not registered? <a href="register-donor.html">Create an account</a></p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Consistent Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 SharePlate. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+
+</html>

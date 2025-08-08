@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Sent Requests - SharePlate</title>
+    <!-- Professional Fonts and Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- Link to the existing table page stylesheet -->
+    <link rel="stylesheet" href="css/request.css">
+    <script src="js/apiConfig.js"></script> 
+</head>
+<body>
+    <!-- Consistent Header for a Logged-in User -->
+    <header>
+        <div class="container">
+            <a href="index.html" class="logo">SharePlate</a>
+            <nav>
+                <ul>
+                    <li><a href="ngo-dashboard.html" class="btn-secondary">Back to Dashboard</a></li>
+                    <li><button id="logout-btn" class="btn-logout">Logout</button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="page-main">
+        <div class="container">
+            <div class="page-header">
+                <h1>Your Sent Requests</h1>
+                <p>Here is the status of all the donation requests you have sent.</p>
+            </div>
+
+            <!-- Table Container for Styling and Responsiveness -->
+            <div class="table-container">
+                <table id="donorTable">
+                    <thead>
+                        <tr>
+                            <th>Donor Name</th>
+                    <th>Mobile Number</th>
+                    <th>Email</th>
+                    <th>Time of Request</th>
+                    <th>Quantity</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Your js/requested-donors.js will populate this area -->
+                    </tbody>
+                </table>
+                <!-- This message can be shown by JS if there are no requests -->
+                <div id="no-requests-message" style="display: none; text-align: center; padding: 2rem; background-color: #fff; border-radius: 8px;">
+                    <p>You have not sent any requests yet.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Consistent Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 SharePlate. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Your existing scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="js/requested-donors.js"></script>
+    
+    <script>
+        // --- YOUR CORE LOGIC: CANCEL FUNCTION (Unchanged) ---
+        // This function will be called by buttons created in your requested-donors.js
+        function cancelRequest(requestId, donorName) { // Assuming you can get a unique requestId
+            if (confirm(`Are you sure you want to cancel the request for ${donorName}?`)) {
+                // Your logic to make an API call to cancel the request goes here.
+                // For example:
+                // axios.post('/requests/cancel', { requestId: requestId })
+                //     .then(response => {
+                //         alert(`${donorName}'s request has been cancelled.`);
+                //         window.location.reload(); // Refresh the page to show the update
+                //     })
+                //     .catch(error => {
+                //         alert('Failed to cancel the request.');
+                //         console.error(error);
+                //     });
+                console.log(`Cancelling request for ${donorName}`);
+            }
+        }
+
+        // --- Standard Scripts for Logged-in Pages ---
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            localStorage.removeItem('token');
+            localStorage.removeItem('ngoId');
+            window.location.href = 'login-ngo.html';
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!localStorage.getItem('token')) {
+                alert('You are not logged in. Redirecting to login page.');
+                window.location.href = 'login-ngo.html';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Donors - SharePlate</title>
+    <!-- Professional Fonts and Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- Leaflet CSS for the map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <!-- Link to the stylesheet for this page -->
+    <link rel="stylesheet" href="css/request-donors.css">
+    <script src="js/apiConfig.js"></script> 
+</head>
+<body>
+    <!-- Consistent Header -->
+    <header>
+        <div class="container">
+            <a href="index.html" class="logo">SharePlate</a>
+            <nav>
+                <ul>
+                    <li><a href="ngo-dashboard.html" class="btn-secondary">Back to Dashboard</a></li>
+                    <li><button id="logout-btn" class="btn-logout">Logout</button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="page-main">
+        <div class="container">
+            <div class="page-header">
+                <h1>Find Nearby Food Donations</h1>
+                <p>Use the map to set your location and find available donors in your area.</p>
+            </div>
+
+            <!-- Location Finder -->
+            <div class="location-finder">
+                <h2>Set Your Location to Begin</h2>
+                <p class="form-hint">Click on the map to place a pin, then click the find button.</p>
+                <div id="map"></div>
+                <input type="hidden" id="latitude" name="latitude">
+                <input type="hidden" id="longitude" name="longitude">
+                <button type="button" id="findDonorsBtn" class="btn">
+                    <i class="fas fa-search-location"></i> Find Nearby Donors
+                </button>
+            </div>
+
+            <!-- Results Section -->
+            <section id="nearby-donors-section" class="results-section" style="display: none;">
+                <h2>Available Donors</h2>
+                <div class="table-container">
+                    <table id="donorTable">
+                        <thead>
+                            <tr>
+                                <th>Donor Name</th>
+                                <th>Food Description</th>
+                                <th>Quantity (Serves)</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="donorList"></tbody>
+                    </table>
+                     <div id="no-donors-message" style="display: none; text-align: center; padding: 2rem;">
+                        <p>No available donors were found in this area.</p>
+                    </div>
+                </div>
+                <!-- NEW: CONTAINER FOR PAGINATION CONTROLS -->
+                <div id="pagination-controls" class="pagination-container"></div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Consistent Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 SharePlate. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="js/map.js"></script>
+    <script src="js/request-donors.js"></script>
+    <script>
+        // Standard Scripts for Logged-in Pages
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            localStorage.clear();
+            window.location.href = 'login-ngo.html';
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!localStorage.getItem('token')) {
+                alert('You are not logged in. Redirecting...');
+                window.location.href = 'login-ngo.html';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,264 @@
+/* General Body Styles */
+body {
+    font-family: 'Lato', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #f4f7f6;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Consistent Header Styles */
+header {
+    background-color: #fff;
+    padding: 1rem 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    width: 100%;
+}
+
+header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #2c3e50;
+    text-decoration: none;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.btn-secondary {
+    display: inline-block;
+    padding: 0.6rem 1.2rem;
+    background-color: transparent;
+    color: #3498db;
+    text-decoration: none;
+    border: 2px solid #3498db;
+    border-radius: 5px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background-color: #3498db;
+    color: #fff;
+}
+
+.btn-logout {
+    display: inline-block;
+    padding: 0.6rem 1.2rem;
+    background-color: #e74c3c;
+    color: #fff;
+    text-decoration: none;
+    border: 2px solid #e74c3c;
+    border-radius: 5px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-logout:hover {
+    background-color: #c0392b;
+    border-color: #c0392b;
+}
+
+/* Main Content Styles */
+.page-main {
+    flex-grow: 1;
+    padding: 3rem 1rem;
+}
+
+.page-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.page-header h1 {
+    font-family: 'Roboto', sans-serif;
+    font-size: 2.5rem;
+    color: #2c3e50;
+    margin: 0 0 0.5rem 0;
+}
+
+.page-header p {
+    font-size: 1.1rem;
+    color: #7f8c8d;
+}
+
+/* Location Finder Card */
+.location-finder {
+    max-width: 800px;
+    margin: 0 auto 3rem auto;
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    text-align: center;
+}
+
+.location-finder h2 {
+    font-family: 'Roboto', sans-serif;
+    color: #34495e;
+    margin-top: 0;
+}
+
+#map {
+    height: 350px;
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    margin: 1rem 0;
+}
+
+.form-hint {
+    font-size: 0.9rem;
+    color: #7f8c8d;
+    margin-bottom: 1rem;
+}
+
+.btn {
+    display: inline-block;
+    padding: 0.85rem 2rem;
+    background-color: #3498db;
+    color: #fff;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #2980b9;
+}
+
+/* Results Section Styling */
+.results-section h2 {
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+}
+
+.table-container {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+}
+
+thead tr {
+    background-color: #f1f5f8;
+    color: #34495e;
+    text-align: left;
+}
+
+th, td {
+    padding: 15px;
+    border-bottom: 1px solid #e1e5e8;
+}
+
+.btn-request {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    background-color: #3498db;
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+.btn-request:hover {
+    background-color: #2980b9;
+}
+
+.btn-request:disabled {
+    background-color: #bdc3c7;
+    cursor: not-allowed;
+}
+
+/* --- NEW: PAGINATION STYLES --- */
+.pagination-container {
+    text-align: center;
+    margin-top: 2rem;
+    padding: 1rem 0;
+}
+
+.pagination-container button {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    color: #3498db;
+    padding: 0.5rem 1rem;
+    margin: 0 0.25rem;
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: 700;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.pagination-container button:hover {
+    background-color: #3498db;
+    color: #fff;
+    border-color: #3498db;
+}
+
+.pagination-container button.active {
+    background-color: #3498db;
+    color: #fff;
+    border-color: #3498db;
+    cursor: default;
+}
+
+.pagination-container button:disabled {
+    color: #ccc;
+    cursor: not-allowed;
+}
+
+.pagination-container button:disabled:hover {
+    background-color: #fff;
+    color: #ccc;
+    border-color: #ddd;
+}
+
+
+/* Consistent Footer */
+footer {
+    background-color: #2c3e50;
+    color: #fff;
+    text-align: center;
+    padding: 2rem 0;
+    width: 100%;
+}

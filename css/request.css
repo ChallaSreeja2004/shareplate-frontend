@@ -1,0 +1,234 @@
+/* General Body Styles */
+body {
+    font-family: 'Lato', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #f4f7f6;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Consistent Header Styles */
+header {
+    background-color: #fff;
+    padding: 1rem 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    width: 100%;
+}
+
+header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #2c3e50;
+    text-decoration: none;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.btn-secondary {
+    display: inline-block;
+    padding: 0.6rem 1.2rem;
+    background-color: transparent;
+    color: #3498db;
+    text-decoration: none;
+    border: 2px solid #3498db;
+    border-radius: 5px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background-color: #3498db;
+    color: #fff;
+}
+
+.btn-logout {
+    display: inline-block;
+    padding: 0.6rem 1.2rem;
+    background-color: #e74c3c;
+    color: #fff;
+    text-decoration: none;
+    border: 2px solid #e74c3c;
+    border-radius: 5px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-logout:hover {
+    background-color: #c0392b;
+    border-color: #c0392b;
+}
+
+/* Main Content Styles */
+.page-main {
+    flex-grow: 1;
+    padding: 3rem 1rem;
+}
+
+.page-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.page-header h1 {
+    font-family: 'Roboto', sans-serif;
+    font-size: 2.5rem;
+    color: #2c3e50;
+    margin: 0 0 0.5rem 0;
+}
+
+.page-header p {
+    font-size: 1.1rem;
+    color: #7f8c8d;
+}
+
+/* Table Container for Responsiveness */
+.table-container {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    overflow-x: auto; /* Key for horizontal scrolling on small screens */
+    padding: 1rem;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 800px; /* Forces scroll on smaller viewports */
+}
+
+thead tr {
+    background-color: #f1f5f8;
+    color: #34495e;
+    text-align: left;
+}
+
+th, td {
+    padding: 15px;
+    border-bottom: 1px solid #e1e5e8;
+}
+
+th {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+}
+
+tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+tbody tr:hover {
+    background-color: #f9fafb;
+}
+
+/* Table Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.action-buttons button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.btn-accept {
+    background-color: #2ecc71;
+    color: white;
+}
+.btn-accept:hover {
+    opacity: 0.8;
+}
+
+.btn-reject {
+    background-color: #e74c3c;
+    color: white;
+}
+.btn-reject:hover {
+    opacity: 0.8;
+}
+
+
+/* Consistent Footer */
+footer {
+    background-color: #2c3e50;
+    color: #fff;
+    text-align: center;
+    padding: 2rem 0;
+    width: 100%;
+}
+/* ... all your existing header, footer, table styles remain here ... */
+
+/* ADD THESE NEW STYLES TO THE BOTTOM OF THE FILE */
+.pagination-container {
+    text-align: center;
+    margin-top: 2rem;
+    padding: 1rem 0;
+}
+
+.pagination-container button {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    color: #3498db;
+    padding: 0.5rem 1rem;
+    margin: 0 0.25rem;
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: 700;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.pagination-container button:hover {
+    background-color: #3498db;
+    color: #fff;
+    border-color: #3498db;
+}
+
+.pagination-container button.active {
+    background-color: #3498db;
+    color: #fff;
+    border-color: #3498db;
+    cursor: default;
+}
+
+.pagination-container button:disabled {
+    color: #ccc;
+    cursor: not-allowed;
+}
+
+.pagination-container button:disabled:hover {
+    background-color: #fff;
+    color: #ccc;
+    border-color: #ddd;
+}
