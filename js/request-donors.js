@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             // This is the API call with pagination parameters
-            const response = await axios.get(
+            const response = await apiClient.get(
                 `/food-donations/donors?latitude=${latitude}&longitude=${longitude}&page=${currentPage}&limit=${limit}`, {
                     headers: { Authorization: `Bearer ${token}` },
                 }
@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     };
 
                     const token = localStorage.getItem('token');
-                    await axios.post('/requests', requestPayload, {
+                    await apiClient.post('/requests', requestPayload, {
                         headers: { Authorization: `Bearer ${token}` },
                     });
 

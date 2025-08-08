@@ -61,7 +61,7 @@ document.getElementById('donation-form').addEventListener('submit', async functi
   // Proceed only if validation passes
   if (isValid) {
       try {
-          const response = await axios.post('/food-donations/donate-food', {
+          const response = await apiClient.post('/food-donations/donate-food', {
               name,
               email,
               mobile,

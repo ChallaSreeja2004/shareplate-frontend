@@ -141,7 +141,7 @@
 
             if (isValid) {
                 try {
-                    const response = await axios.post('/register-donor', { name, email, mobile, password });
+                    const response = await apiClient.post('/register-donor', { name, email, mobile, password });
                     console.log('Registration successful:', response.data);
                     window.location.href = 'login-donor.html';
                 } catch (error) {

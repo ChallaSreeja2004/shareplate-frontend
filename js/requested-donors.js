@@ -6,7 +6,7 @@ console.log(ngoId);
 // Functicon to fetch requests for the donor
 async function fetchRequests() {
   try {
-    const response = await axios.get(`/requests/ngo/${ngoId}`);
+    const response = await apiClient.get(`/requests/ngo/${ngoId}`);
     console.log(response);
     if (response.length == 0) {
       alert('records not found');
@@ -79,7 +79,7 @@ async function cancelRequest(requestId) {
       },
     );
     // Sending a PATCH request to update the request status to "cancelled"
-    await axios.delete(`/requests/${requestId}`);
+    await apiClient.delete(`/requests/${requestId}`);
     alert(`Request ${requestId} has been cancelled.`);
     fetchRequests(); // Refresh the list of requests after cancellation
   } catch (error) {

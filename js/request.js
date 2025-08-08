@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             // --- API CALL WITH PAGINATION and CORRECTED URL ---
-            const response = await axios.get(`/requests/donor/${donorId}?page=${currentPage}&limit=${limit}`, {
+            const response = await apiClient.get(`/requests/donor/${donorId}?page=${currentPage}&limit=${limit}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 try {
                     // Using PATCH as defined in your router
-                    await axios.patch(`/requests/${requestId}`, { status: status }, {
+                    await apiClient.patch(`/requests/${requestId}`, { status: status }, {
                          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
                     });
 

@@ -20,7 +20,7 @@ document.getElementById('donation-form').addEventListener('submit', async (e) =>
     console.log(foodDetails); // Check the values before submission
 
     try {
-        const response = await axios.post('/food-donations/donate-food', foodDetails);
+        const response = await apiClient.post('/food-donations/donate-food', foodDetails);
 
         if (response.status === 200) {
             alert('Food donation added successfully.');

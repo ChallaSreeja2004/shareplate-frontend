@@ -33,7 +33,7 @@
             errorMessageDiv.style.display = 'none'; 
 
             try {
-                const response = await axios.post('/login-ngo', { email, password });
+                const response = await apiClient.post('/login-ngo', { email, password });
                 console.log(response.data)
                 if (response.data.token) {
                     localStorage.setItem('ngoId', response.data.user.id);

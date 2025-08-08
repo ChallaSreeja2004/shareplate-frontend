@@ -94,7 +94,7 @@
 
             try {
                 // Your axios call is the same
-                await axios.post('/food-donations/donate-food', { name, email, mobile, quantity, description, latitude, longitude, userId });
+                await apiClient.post('/food-donations/donate-food', { name, email, mobile, quantity, description, latitude, longitude, userId });
                 
                 // --- THIS IS THE CORRECTED, FOOLPROOF LOGIC ---
                 document.getElementById('donation-form').reset();
