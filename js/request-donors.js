@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- REFERENCES TO HTML ELEMENTS ---
+    // --- REFERENCES TO HTML ELEMENTS (Unchanged) ---
     const findDonorsBtn = document.getElementById('findDonorsBtn');
     const donorList = document.getElementById('donorList');
     const resultsSection = document.getElementById('nearby-donors-section');
@@ -8,11 +8,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const latitudeInput = document.getElementById('latitude');
     const longitudeInput = document.getElementById('longitude');
 
-    // --- PAGINATION STATE ---
+    // --- PAGINATION STATE (Unchanged) ---
     let currentPage = 1;
     const limit = 10;
 
-    // --- GEOLOCATION LOGIC ---
+    // --- GEOLOCATION LOGIC (Unchanged) ---
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             (position) => {
@@ -25,13 +25,13 @@ document.addEventListener('DOMContentLoaded', () => {
         alert('Geolocation is not supported by your browser. Please click on the map to set your location manually.');
     }
 
-    // --- EVENT LISTENER FOR THE MAIN SEARCH BUTTON ---
+    // --- EVENT LISTENER (Unchanged) ---
     findDonorsBtn.addEventListener('click', () => {
         currentPage = 1;
         fetchAndDisplayDonors();
     });
 
-    // --- MAIN FUNCTION TO FETCH AND DISPLAY DATA ---
+    // --- MAIN FETCH FUNCTION (Unchanged) ---
     async function fetchAndDisplayDonors() {
         const latitude = latitudeInput.value;
         const longitude = longitudeInput.value;
@@ -45,7 +45,6 @@ document.addEventListener('DOMContentLoaded', () => {
         paginationControls.innerHTML = '';
 
         try {
-            // --- CORRECTED GET REQUEST (manual headers removed) ---
             const response = await apiClient.get(
                 `/food-donations/donors?latitude=${latitude}&longitude=${longitude}&page=${currentPage}&limit=${limit}`
             );
@@ -67,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <td data-label="Food Description">${donor.description}</td>
                         <td data-label="Quantity">${donor.quantity}</td>
                         <td data-label="Action">
-                            <button class="btn-request" data-donor-id="${donor.donorId}" data-donor-name="${donor.name}" data-donor-email="${donor.email}" data-donor-mobile="${donor.mobile}" data-quantity="${donor.quantity}" data-description="${donor.description}">
+                            <button class="btn-request" data-donor-id="${donor.donorId}" data-donor-name="${donor.name}" data-quantity="${donor.quantity}" data-description="${donor.description}">
                                 Request Food
                             </button>
                         </td>
@@ -83,35 +82,40 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- CORE LOGIC FOR SENDING A REQUEST ---
+    // --- THIS IS THE NEW, SIMPLIFIED FUNCTION ---
     function addRequestButtonListeners() {
         document.querySelectorAll('.request-btn').forEach((button) => {
             button.addEventListener('click', async (event) => {
                 const btn = event.currentTarget;
-                const { donorId, quantity, description, donorName, donorMobile, donorEmail } = btn.dataset;
+                const { donorId, quantity, description, donorName } = btn.dataset;
 
+                // 1. We now only need the logged-in user's ID.
                 const ngoId = localStorage.getItem('ngoId');
-                const ngoName = localStorage.getItem('ngoName'); 
-                const ngoMobile = localStorage.getItem('ngoMobile');
-                const ngoEmail = localStorage.getItem('ngoEmail');
 
-                if (!ngoId || !ngoName || !ngoMobile || !ngoEmail) {
-                    return alert('Your NGO details could not be found. Please try logging out and back in again.');
+                if (!ngoId) {
+                    return alert('Your user ID could not be found. Please try logging out and back in again.');
                 }
 
                 try {
+                    // 2. The payload is now much smaller and more secure.
+                    // The backend will look up the NGO and Donor details itself.
                     const requestPayload = {
-                        ngoName, mobileNumber: ngoMobile, email: ngoEmail,
-                        location: { type: 'Point', coordinates: [parseFloat(longitudeInput.value), parseFloat(latitudeInput.value)] },
-                        donorId, ngoId,
-                        foodDetails: { foodQuantity: parseInt(quantity, 10), description },
-                        donorName, donorMobile, donorEmail,
+                        location: {
+                            type: 'Point',
+                            coordinates: [parseFloat(longitudeInput.value), parseFloat(latitudeInput.value)],
+                        },
+                        donorId: donorId,
+                        ngoId: ngoId,
+                        foodDetails: {
+                            foodQuantity: parseInt(quantity, 10),
+                            description: description,
+                        },
                     };
 
-                    // --- CORRECTED POST REQUEST (manual headers removed) ---
+                    // 3. The apiClient call is clean and simple.
                     await apiClient.post('/requests', requestPayload);
 
-                    // This code will now execute correctly
+                    // 4. This code will now be reached, and the button will update.
                     btn.disabled = true;
                     btn.innerText = 'Request Sent';
                     alert(`Request sent successfully to ${donorName}!`);
@@ -124,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- FUNCTION TO RENDER PAGINATION CONTROLS ---
+    // --- RENDER PAGINATION FUNCTION (Unchanged) ---
     function renderPagination(totalPages) {
         paginationControls.innerHTML = '';
         if (totalPages <= 1) return;
