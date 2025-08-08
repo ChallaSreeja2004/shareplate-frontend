@@ -1,5 +1,3 @@
-// --- FINAL CORRECTED VERSION of js/request-donors.js ---
-
 document.addEventListener('DOMContentLoaded', () => {
     // All the variable references are correct
     const findDonorsBtn = document.getElementById('findDonorsBtn');
@@ -21,7 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- MAIN FETCH FUNCTION ---
     async function fetchAndDisplayDonors() {
-        // ... (your existing fetch logic is correct)
         const latitude = latitudeInput.value;
         const longitude = longitudeInput.value;
         resultsSection.style.display = 'block';
@@ -40,14 +37,13 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 donors.forEach((donor) => {
                     const row = document.createElement('tr');
-                    // CRITICAL FIX: Ensure you are using the correct unique ID from MongoDB, which is `_id`.
-                    row.innerHTML = `<td data-label="Donor Name">${donor.name}</td><td data-label="Food Description">${donor.description}</td><td data-label="Quantity">${donor.quantity}</td><td data-label="Action"><button class="btn-request" data-donor-id="${donor._id}" data-donor-name="${donor.name}" data-quantity="${donor.quantity}" data-description="${donor.description}">Request Food</button></td>`;
+                    // --- CORRECTED ---
+                    // The data attribute is now consistently named 'data-donation-id'.
+                    row.innerHTML = `<td data-label="Donor Name">${donor.name}</td><td data-label="Food Description">${donor.description}</td><td data-label="Quantity">${donor.quantity}</td><td data-label="Action"><button class="btn-request" data-donation-id="${donor._id}" data-donor-name="${donor.name}" data-quantity="${donor.quantity}" data-description="${donor.description}">Request Food</button></td>`;
                     donorList.appendChild(row);
                 });
 
-                // --- THE SOLUTION: DELAY THE LISTENER ATTACHMENT ---
-                // This pushes the function call to the end of the event queue,
-                // ensuring the browser has rendered the buttons before we search for them.
+                // This timeout is good practice.
                 setTimeout(addRequestButtonListeners, 0);
             }
             renderPagination(totalPages);
@@ -62,18 +58,27 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.btn-request').forEach((button) => {
             button.addEventListener('click', async (event) => {
                 const btn = event.currentTarget;
-                const { donorId, quantity, description, donorName } = btn.dataset;
+                
+                // --- CORRECTED ---
+                // We now extract 'donationId' from the dataset, which matches the HTML attribute.
+                const { donationId, quantity, description, donorName } = btn.dataset;
+                
                 const ngoId = localStorage.getItem('ngoId');
 
                 if (!ngoId) {
                     return alert('Your user ID could not be found. Please log out and back in again.');
                 }
-                if (!donorId || donorId === 'undefined') {
-                    // This is a new safety check. The `_id` fix should prevent this.
-                    return alert('Could not find a valid donor ID for this request. Please refresh the page.');
+                
+                // --- CORRECTED ---
+                // The safety check now validates the 'donationId' variable.
+                if (!donationId || donationId === 'undefined') {
+                    return alert('Could not find a valid donation ID for this request. Please refresh the page.');
                 }
 
                 try {
+                    // --- CORRECTED ---
+                    // The payload now correctly uses the 'donationId' variable, which is now defined.
+                    // This resolves the "ReferenceError: donationId is not defined".
                     const requestPayload = {
                         location: {
                             type: 'Point',
