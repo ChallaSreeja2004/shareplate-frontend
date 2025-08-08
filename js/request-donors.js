@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- PAGINATION STATE ---
     let currentPage = 1;
-    const limit = 10; // You can change this to 5, 15, etc., as you see fit.
+    const limit = 10;
 
     // --- GEOLOCATION LOGIC ---
     if (navigator.geolocation) {
@@ -18,11 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
             (position) => {
                 latitudeInput.value = position.coords.latitude;
                 longitudeInput.value = position.coords.longitude;
-                // Your map.js should ideally center the map on these coordinates
             },
-            () => {
-                alert('Geolocation permission was denied. Please click on the map to set your location manually.');
-            }
+            () => { alert('Geolocation permission was denied. Please click on the map to set your location manually.'); }
         );
     } else {
         alert('Geolocation is not supported by your browser. Please click on the map to set your location manually.');
@@ -30,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- EVENT LISTENER FOR THE MAIN SEARCH BUTTON ---
     findDonorsBtn.addEventListener('click', () => {
-        currentPage = 1; // Always reset to page 1 for a new search
+        currentPage = 1;
         fetchAndDisplayDonors();
     });
 
@@ -38,45 +35,31 @@ document.addEventListener('DOMContentLoaded', () => {
     async function fetchAndDisplayDonors() {
         const latitude = latitudeInput.value;
         const longitude = longitudeInput.value;
-        const token = localStorage.getItem('token');
 
-        if (!latitude || !longitude) {
-            return alert('Please select your location on the map before searching.');
-        }
-        if (!token) {
-            alert('You need to log in first.');
-            return window.location.href = '/login-ngo.html';
-        }
+        if (!latitude || !longitude) return alert('Please select your location on the map before searching.');
+        if (!localStorage.getItem('token')) return window.location.href = '/login-ngo.html';
 
-        // Update UI for loading state
         resultsSection.style.display = 'block';
         noDonorsMessage.style.display = 'none';
         donorList.innerHTML = `<tr><td colspan="4">Loading nearby donors...</td></tr>`;
         paginationControls.innerHTML = '';
 
         try {
-            // This is the API call with pagination parameters
+            // --- CORRECTED GET REQUEST (manual headers removed) ---
             const response = await apiClient.get(
-                `/food-donations/donors?latitude=${latitude}&longitude=${longitude}&page=${currentPage}&limit=${limit}`, {
-                    headers: { Authorization: `Bearer ${token}` },
-                }
+                `/food-donations/donors?latitude=${latitude}&longitude=${longitude}&page=${currentPage}&limit=${limit}`
             );
 
-            // Safety check for the data structure from the backend
             if (!response.data || !Array.isArray(response.data.donors)) {
-                console.error("Unexpected response format from server:", response.data);
                 throw new Error("Received invalid data from the server.");
             }
 
-            // Destructure the expected response
             const { donors, totalPages } = response.data;
-            
             donorList.innerHTML = '';
 
             if (donors.length === 0) {
                 noDonorsMessage.style.display = 'block';
             } else {
-                // Your core logic for populating the table
                 donors.forEach((donor) => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
@@ -93,24 +76,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 addRequestButtonListeners(); 
             }
-            
-            // Render the page number controls
             renderPagination(totalPages);
-
         } catch (error) {
             console.error('Error fetching donors:', error);
             donorList.innerHTML = `<tr><td colspan="4" style="color: red; text-align: center;">Error fetching donors. Please try again.</td></tr>`;
         }
     }
 
-    // --- YOUR CORE LOGIC FOR SENDING A REQUEST ---
+    // --- CORE LOGIC FOR SENDING A REQUEST ---
     function addRequestButtonListeners() {
         document.querySelectorAll('.request-btn').forEach((button) => {
             button.addEventListener('click', async (event) => {
                 const btn = event.currentTarget;
                 const { donorId, quantity, description, donorName, donorMobile, donorEmail } = btn.dataset;
 
-                // Getting NGO details from localStorage
                 const ngoId = localStorage.getItem('ngoId');
                 const ngoName = localStorage.getItem('ngoName'); 
                 const ngoMobile = localStorage.getItem('ngoMobile');
@@ -121,31 +100,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 try {
-                    // Building the payload exactly as you specified
                     const requestPayload = {
-                        ngoName: ngoName,
-                        mobileNumber: ngoMobile,
-                        email: ngoEmail,
-                        location: {
-                            type: 'Point',
-                            coordinates: [parseFloat(longitudeInput.value), parseFloat(latitudeInput.value)],
-                        },
-                        donorId: donorId,
-                        ngoId: ngoId,
-                        foodDetails: {
-                            foodQuantity: parseInt(quantity, 10),
-                            description: description,
-                        },
-                        donorName: donorName,
-                        donorMobile: donorMobile,
-                        donorEmail: donorEmail,
+                        ngoName, mobileNumber: ngoMobile, email: ngoEmail,
+                        location: { type: 'Point', coordinates: [parseFloat(longitudeInput.value), parseFloat(latitudeInput.value)] },
+                        donorId, ngoId,
+                        foodDetails: { foodQuantity: parseInt(quantity, 10), description },
+                        donorName, donorMobile, donorEmail,
                     };
 
-                    const token = localStorage.getItem('token');
-                    await apiClient.post('/requests', requestPayload, {
-                        headers: { Authorization: `Bearer ${token}` },
-                    });
+                    // --- CORRECTED POST REQUEST (manual headers removed) ---
+                    await apiClient.post('/requests', requestPayload);
 
+                    // This code will now execute correctly
                     btn.disabled = true;
                     btn.innerText = 'Request Sent';
                     alert(`Request sent successfully to ${donorName}!`);
@@ -175,19 +141,12 @@ document.addEventListener('DOMContentLoaded', () => {
             return button;
         };
 
-        // Previous Button
         paginationControls.appendChild(createButton('« Prev', currentPage - 1, currentPage === 1));
-
-        // Page Number Buttons
         for (let i = 1; i <= totalPages; i++) {
             const pageButton = createButton(i, i);
-            if (i === currentPage) {
-                pageButton.classList.add('active');
-            }
+            if (i === currentPage) pageButton.classList.add('active');
             paginationControls.appendChild(pageButton);
         }
-        
-        // Next Button
         paginationControls.appendChild(createButton('Next »', currentPage + 1, currentPage === totalPages));
     }
 });
