@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,13 +8,15 @@
     <!-- Professional Fonts and Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Lato:wght@400;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <!-- Leaflet CSS for the map -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
     <!-- Link to the stylesheet for this page -->
     <link rel="stylesheet" href="css/request-donors.css">
 </head>
+
 <body>
     <!-- Consistent Header -->
     <header>
@@ -63,13 +66,22 @@
                         </thead>
                         <tbody id="donorList"></tbody>
                     </table>
-                     <div id="no-donors-message" style="display: none; text-align: center; padding: 2rem;">
+                    <div id="no-donors-message" style="display: none; text-align: center; padding: 2rem;">
                         <p>No available donors were found in this area.</p>
                     </div>
                 </div>
-                <!-- NEW: CONTAINER FOR PAGINATION CONTROLS -->
                 <div id="pagination-controls" class="pagination-container"></div>
             </section>
+        </div>
+        
+        <!-- The modal HTML is correctly placed here. -->
+        <div id="action-modal" class="modal-overlay hidden">
+            <div class="modal-content">
+                <div id="modal-icon" class="modal-icon"></div>
+                <h2 id="modal-title" class="modal-title"></h2>
+                <p id="modal-message" class="modal-message"></p>
+                <button id="modal-close-btn" class="modal-close-btn">Close</button>
+            </div>
         </div>
     </main>
 
@@ -83,22 +95,10 @@
     <!-- Scripts -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="js/apiConfig.js"></script> 
+    <script src="js/apiConfig.js"></script>
     <script src="js/map.js"></script>
     <script src="js/request-donors.js"></script>
-    <script>
-        // Standard Scripts for Logged-in Pages
-        document.getElementById('logout-btn').addEventListener('click', () => {
-            localStorage.clear();
-            window.location.href = 'login-ngo.html';
-        });
-
-        document.addEventListener('DOMContentLoaded', () => {
-            if (!localStorage.getItem('token')) {
-                alert('You are not logged in. Redirecting...');
-                window.location.href = 'login-ngo.html';
-            }
-        });
-    </script>
+    
+    <!-- The inline script block has been removed from here. Its logic is now in request-donors.js -->
 </body>
 </html>

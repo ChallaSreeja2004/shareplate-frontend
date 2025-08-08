@@ -1,5 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // All the variable references are correct
+    // --- AUTHENTICATION CHECK (MOVED FROM HTML) ---
+    if (!localStorage.getItem('token')) {
+        // This alert is acceptable because it happens before a redirect,
+        // so the user will not interact further with this page.
+        alert('You are not logged in. Redirecting...');
+        window.location.href = 'login-ngo.html';
+        return; // Stop the rest of the script from running
+    }
+
+    // --- REFERENCES TO HTML ELEMENTS ---
     const findDonorsBtn = document.getElementById('findDonorsBtn');
     const donorList = document.getElementById('donorList');
     const resultsSection = document.getElementById('nearby-donors-section');
@@ -7,10 +16,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const paginationControls = document.getElementById('pagination-controls');
     const latitudeInput = document.getElementById('latitude');
     const longitudeInput = document.getElementById('longitude');
+    const modal = document.getElementById('action-modal');
+    const modalIcon = document.getElementById('modal-icon');
+    const modalTitle = document.getElementById('modal-title');
+    const modalMessage = document.getElementById('modal-message');
+    const modalCloseBtn = document.getElementById('modal-close-btn');
+
+    // --- STATE ---
     let currentPage = 1;
     const limit = 10;
 
-    // All the setup logic is correct
+    // --- SETUP LOGIC ---
     if (navigator.geolocation) { /* ... */ }
     findDonorsBtn.addEventListener('click', () => {
         currentPage = 1;
@@ -21,6 +37,9 @@ document.addEventListener('DOMContentLoaded', () => {
     async function fetchAndDisplayDonors() {
         const latitude = latitudeInput.value;
         const longitude = longitudeInput.value;
+        if (!latitude || !longitude) {
+            return showModal('Location Required', 'Please set your location on the map before searching.', false);
+        }
         resultsSection.style.display = 'block';
         noDonorsMessage.style.display = 'none';
         donorList.innerHTML = `<tr><td colspan="4">Loading nearby donors...</td></tr>`;
@@ -28,7 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const response = await apiClient.get(`/food-donations/donors?latitude=${latitude}&longitude=${longitude}&page=${currentPage}&limit=${limit}`);
             if (!response.data || !Array.isArray(response.data.donors)) { throw new Error("Invalid data format"); }
-            
             const { donors, totalPages } = response.data;
             donorList.innerHTML = '';
 
@@ -37,13 +55,9 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 donors.forEach((donor) => {
                     const row = document.createElement('tr');
-                    // --- CORRECTED ---
-                    // The data attribute is now consistently named 'data-donation-id'.
-                    row.innerHTML = `<td data-label="Donor Name">${donor.name}</td><td data-label="Food Description">${donor.description}</td><td data-label="Quantity">${donor.quantity}</td><td data-label="Action"><button class="btn-request" data-donation-id="${donor._id}" data-donor-name="${donor.name}" data-quantity="${donor.quantity}" data-description="${donor.description}">Request Food</button></td>`;
+                    row.innerHTML = `<td data-label="Donor Name">${donor.name}</td><td data-label="Food Description">${donor.description}</td><td data-label="Quantity">${donor.quantity}</td><td data-label="Action"><button class="btn-request" data-donation-id="${donor._id}" data-donor-name="${donor.name}">Request Food</button></td>`;
                     donorList.appendChild(row);
                 });
-
-                // This timeout is good practice.
                 setTimeout(addRequestButtonListeners, 0);
             }
             renderPagination(totalPages);
@@ -53,60 +67,62 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- ADD LISTENERS FUNCTION (Now it will find the buttons) ---
+    // --- ADD LISTENERS FUNCTION ---
     function addRequestButtonListeners() {
         document.querySelectorAll('.btn-request').forEach((button) => {
             button.addEventListener('click', async (event) => {
                 const btn = event.currentTarget;
-                
-                // --- CORRECTED ---
-                // We now extract 'donationId' from the dataset, which matches the HTML attribute.
-                const { donationId, quantity, description, donorName } = btn.dataset;
-                
+                const { donationId, donorName } = btn.dataset; // Simplified data needed
                 const ngoId = localStorage.getItem('ngoId');
 
                 if (!ngoId) {
-                    return alert('Your user ID could not be found. Please log out and back in again.');
+                    return showModal('Authentication Error', 'Your user ID could not be found. Please log out and back in again.', false);
                 }
-                
-                // --- CORRECTED ---
-                // The safety check now validates the 'donationId' variable.
                 if (!donationId || donationId === 'undefined') {
-                    return alert('Could not find a valid donation ID for this request. Please refresh the page.');
+                    return showModal('Error', 'Could not find a valid donation ID for this request. Please refresh the page.', false);
                 }
-
                 try {
-                    // --- CORRECTED ---
-                    // The payload now correctly uses the 'donationId' variable, which is now defined.
-                    // This resolves the "ReferenceError: donationId is not defined".
                     const requestPayload = {
-                        location: {
-                            type: 'Point',
-                            coordinates: [parseFloat(longitudeInput.value), parseFloat(latitudeInput.value)],
-                        },
+                        location: { type: 'Point', coordinates: [parseFloat(longitudeInput.value), parseFloat(latitudeInput.value)] },
                         donationId: donationId,
                         ngoId: ngoId,
-                        foodDetails: {
-                            foodQuantity: parseInt(quantity, 10),
-                            description: description,
-                        },
+                        // Note: Food details are now handled by the backend, so we don't need to send them.
                     };
-                    
                     await apiClient.post('/requests', requestPayload);
-                    
                     btn.disabled = true;
                     btn.innerText = 'Request Sent';
-                    alert(`Request sent successfully to ${donorName}!`);
-
+                    showModal('Success!', `Request sent successfully to ${donorName}!`, true);
                 } catch (error) {
                     console.error('Error sending request:', error);
-                    alert(error.response?.data?.message || 'Could not send request. Please try again.');
+                    const errorMessage = error.response?.data?.message || 'Could not send request. Please try again.';
+                    showModal('Error', errorMessage, false);
                 }
             });
         });
     }
 
-    // --- RENDER PAGINATION (Unchanged) ---
+    // --- MODAL HELPER FUNCTIONS ---
+    function showModal(title, message, isSuccess = true) {
+        if (!modal) return;
+        modalTitle.textContent = title;
+        modalMessage.textContent = message;
+        modalIcon.innerHTML = isSuccess ? `<i class="fa-solid fa-circle-check"></i>` : `<i class="fa-solid fa-circle-xmark"></i>`;
+        modalIcon.className = isSuccess ? 'modal-icon success' : 'modal-icon error';
+        modal.classList.remove('hidden');
+    }
+
+    function hideModal() {
+        if (!modal) return;
+        modal.classList.add('hidden');
+    }
+
+    // Add modal event listeners
+    if (modal) {
+        modalCloseBtn.addEventListener('click', hideModal);
+        modal.addEventListener('click', (e) => { if (e.target === modal) hideModal(); });
+    }
+
+    // --- RENDER PAGINATION ---
     function renderPagination(totalPages) {
         paginationControls.innerHTML = '';
         if (totalPages <= 1) return;
@@ -125,4 +141,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         paginationControls.appendChild(createButton('Next »', currentPage + 1, currentPage === totalPages));
     }
+
+    // --- LOGOUT BUTTON LOGIC (MOVED FROM HTML) ---
+    document.getElementById('logout-btn').addEventListener('click', () => {
+        localStorage.clear();
+        window.location.href = 'login-ngo.html';
+    });
 });

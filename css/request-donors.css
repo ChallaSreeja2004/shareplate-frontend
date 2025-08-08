@@ -210,7 +210,7 @@ th, td {
     cursor: not-allowed;
 }
 
-/* --- NEW: PAGINATION STYLES --- */
+/* Pagination Styles */
 .pagination-container {
     text-align: center;
     margin-top: 2rem;
@@ -261,4 +261,88 @@ footer {
     text-align: center;
     padding: 2rem 0;
     width: 100%;
+}
+
+/* ================================== */
+/* ===== NEW: MODAL STYLES ADDED ===== */
+/* ================================== */
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 2.5rem;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+    transform: scale(1);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay.hidden .modal-content {
+    transform: scale(0.9);
+}
+
+.modal-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.modal-icon.success {
+    color: #2ecc71;
+}
+
+.modal-icon.error {
+    color: #e74c3c;
+}
+
+.modal-title {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.8rem;
+    margin: 0 0 0.5rem 0;
+    color: #2c3e50;
+}
+
+.modal-message {
+    font-size: 1rem;
+    color: #7f8c8d;
+    margin-bottom: 2rem;
+}
+
+.modal-close-btn {
+    display: inline-block;
+    padding: 0.8rem 1.5rem;
+    background-color: #3498db;
+    color: #fff;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+}
+
+.modal-close-btn:hover {
+    background-color: #2980b9;
 }
